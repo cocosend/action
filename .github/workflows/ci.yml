@@ -20,7 +20,7 @@ jobs:
       - name: Verify native DSP, Swift models and WAV (Linux source-only)
         run: scripts/verify_linux.sh
   ios-simulator:
-    runs-on: macos-15
+    runs-on: macos-15-intel
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
