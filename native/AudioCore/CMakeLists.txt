@@ -1,0 +1,6 @@
+add_library(track_audio_core STATIC TrackAudioCore.cpp MasterCaptureRing.cpp SpectralEnvelope.cpp)
+target_include_directories(track_audio_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_compile_features(track_audio_core PUBLIC cxx_std_17)
+if (NOT MSVC)
+  target_compile_options(track_audio_core PRIVATE -Wall -Wextra -Wpedantic)
+endif()
