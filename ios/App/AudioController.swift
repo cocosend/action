@@ -200,8 +200,12 @@ final class AudioController: ObservableObject {
     }
 
     deinit {
-        // Stop the mixer tap before removing the graph.
-        liveRecorder?.stop()
+        // Actor-isolated recorder shutdown cannot be called synchronously from
+        // Swift 5 deinit. Retain the recorder until the main actor removes the tap,
+        // then allow the C++ capture ring to close safely.
+        if let recorder = liveRecorder {
+            Task { @MainActor in recorder.stop() }
+        }
         audioEngine.stop()
         if let source { audioEngine.detach(source) }
         if let interruptionObserver { NotificationCenter.default.removeObserver(interruptionObserver) }
