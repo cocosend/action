@@ -1,0 +1,69 @@
+name: DJTrackBuilderMixAutoPro
+options:
+  bundleIdPrefix: com.artss.trackbuilder
+  deploymentTarget:
+    iOS: '16.0'
+settings:
+  base:
+    SWIFT_VERSION: '5.0'
+    CLANG_CXX_LANGUAGE_STANDARD: 'c++17'
+    IPHONEOS_DEPLOYMENT_TARGET: '16.0'
+    TARGETED_DEVICE_FAMILY: '1'
+    SWIFT_STRICT_CONCURRENCY: minimal
+    ENABLE_BITCODE: 'NO'
+targets:
+  DJTrackBuilderMixAutoPro:
+    type: application
+    platform: iOS
+    sources:
+      - path: ios/App
+      - path: native/AudioCore
+        includes:
+          - '*.cpp'
+          - '*.h'
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.artss.trackbuilder.mixautopro
+        INFOPLIST_FILE: ios/App/Info.plist
+        SWIFT_OBJC_BRIDGING_HEADER: ios/App/AudioCore-Bridging-Header.h
+        HEADER_SEARCH_PATHS: '$(SRCROOT)/native/AudioCore'
+        GENERATE_INFOPLIST_FILE: 'NO'
+        CODE_SIGN_STYLE: Automatic
+  DJTrackBuilderMixAutoProAudioGraphTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: ios/IntegrationTests
+    dependencies:
+      - target: DJTrackBuilderMixAutoPro
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: 'YES'
+        PRODUCT_BUNDLE_IDENTIFIER: com.artss.trackbuilder.mixautopro.audiotests
+  DJTrackBuilderMixAutoProUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: ios/UITests
+    dependencies:
+      - target: DJTrackBuilderMixAutoPro
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: 'YES'
+        PRODUCT_BUNDLE_IDENTIFIER: com.artss.trackbuilder.mixautopro.uitests
+schemes:
+  DJTrackBuilderMixAutoPro:
+    build:
+      targets:
+        DJTrackBuilderMixAutoPro: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - name: DJTrackBuilderMixAutoProAudioGraphTests
+          parallelizable: false
+        - name: DJTrackBuilderMixAutoProUITests
+          parallelizable: false
+    archive:
+      config: Release
